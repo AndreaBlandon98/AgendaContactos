@@ -7,6 +7,18 @@ $db = $database->getConnection();
 
 $contacto = new Contacto($db);
 $stmt = $contacto->leer();
+
+
+if (isset($_GET['success'])) {
+    $message = "La operación fue exitosa.";
+    $type = "success"; 
+} elseif (isset($_GET['error'])) {
+    $message = "Hubo un error al procesar la operación.";
+    $type = "error";  
+} else {
+    $message = "";
+    $type = "";
+}
 ?>
 
 <!DOCTYPE html>
@@ -15,19 +27,31 @@ $stmt = $contacto->leer();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agenda de Contactos</title>
-    <!-- Incluir Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet"> <!-- Si tienes un archivo de estilos personalizado -->
+    <link href="css/style.css" rel="stylesheet"> 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
 </head>
 <body>
 
 <div class="container mt-4">
     <h2 class="mb-4 text-center">Agenda de Contactos</h2>
     
-    <!-- Botón para agregar un nuevo contacto -->
+   
     <a href="crear.php" class="btn btn-success mb-3">Agregar Nuevo Contacto</a>
     
-    <!-- Tabla de contactos -->
+   
+    <?php if ($message) { ?>
+    <script>
+        Swal.fire({
+            title: '<?php echo ucfirst($type); ?>',
+            text: '<?php echo $message; ?>',
+            icon: '<?php echo $type; ?>',
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+    <?php } ?>
+
+    
     <table class="table table-striped table-bordered">
         <thead class="thead-dark">
             <tr>
@@ -59,8 +83,9 @@ $stmt = $contacto->leer();
     </table>
 </div>
 
-<!-- Incluir Bootstrap JS -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
+

@@ -15,13 +15,13 @@ if ($_POST) {
     $contacto->direccion = $_POST['direccion'];
 
     if ($contacto->crear()) {
-        echo "<script>alert('Contacto creado con éxito');</script>";
-        header('Location: index.php');
+        header('Location: index.php?success=true');
+        exit();
     } else {
-        echo "<script>alert('Error al crear el contacto');</script>";
+        header('Location: index.php?error=true');
+        exit();
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -31,6 +31,7 @@ if ($_POST) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Contacto</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
 </head>
 <body>
     <div class="container mt-4">
@@ -61,5 +62,26 @@ if ($_POST) {
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <?php if (isset($_GET['success'])) { ?>
+    <script>
+        Swal.fire({
+            title: 'Éxito',
+            text: 'El contacto se ha creado con éxito.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+    <?php } elseif (isset($_GET['error'])) { ?>
+    <script>
+        Swal.fire({
+            title: 'Error',
+            text: 'Hubo un error al crear el contacto.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+    <?php } ?>
+
 </body>
 </html>
